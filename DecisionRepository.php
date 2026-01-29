@@ -1,80 +1,109 @@
 <?php
 declare(strict_types=1);
 
-namespace SEOJusAI\Decisions;
+namespace SEOJusAI\Repository;
 
-defined('ABSPATH') || exit;
+use SEOJusAI\Domain\DecisionRecord;
+
+defined('ABSPATH')||exit;
 
 final class DecisionRepository {
 
-    public static function getLatestByPost(int $postId, int $limit = 5): array {
+    public static function save(DecisionRecord $d): void {
         global $wpdb;
-        $table = $wpdb->prefix.'seojusai_decisions';
-        return $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE post_id=%d ORDER BY id DESC LIMIT %d", $postId, $limit));
+        $table=$wpdb->prefix.'seojusai_decisions';
+        $wpdb->replace($table,[
+            'decision_hash'=>$d->decisionHash,
+            'post_id'=>$d->postId,
+            'score'=>$d->score,
+            'summary'=>$d->summary,
+            'status'=>$d->status,
+            'created_at'=>current_time('mysql',true),
+        ],['%s','%d','%f','%s','%s','%s']);
     }
 
-
-    private function table(): string {
+    public static function get_by_post(int $post_id): array {
         global $wpdb;
-        return $wpdb->prefix . 'seojusai_decisions';
+        $table=$wpdb->prefix.'seojusai_decisions';
+        return $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE post_id=%d ORDER BY id DESC",$post_id));
     }
+
+    public static function get(string $decision_hash): ?object {
+        global $wpdb;
+        $table=$wpdb->prefix.'seojusai_decisions';
+        return $wpdb->get_row($wpdb->prepare("SELECT * FROM $table WHERE decision_hash=%s",$decision_hash));
+    }
+
+public static function mark_executed(string $decision_hash): void {
+    global $wpdb;
+    $table = $wpdb->prefix . 'seojusai_decisions';
+    $wpdb->update(
+        $table,
+        ['status' => 'executed'],
+        ['decision_hash' => $decision_hash],
+        ['%s'],
+        ['%s']
+    );
+}
+
+public static function mark_cancelled(string $decision_hash, string $reason = ''): void {
+    global $wpdb;
+    $table = $wpdb->prefix . 'seojusai_decisions';
+    $wpdb->update(
+        $table,
+        ['status' => 'cancelled', 'summary' => $reason ?: 'Cancelled'],
+        ['decision_hash' => $decision_hash],
+        ['%s','%s'],
+        ['%s']
+    );
+}
 
     /**
-     * @param array<string,mixed> $decision
-     * @param array<string,mixed> $ctx
-     * @return int decision_id
+     * Filter decisions by optional post ID, status and confidence threshold.
+     *
+     * @param array<string,mixed> $args {
+     *     Optional. Array of query arguments.
+     *
+     *     @type int    $post_id    Optional post ID to filter by.
+     *     @type string $status     Optional status (planned/approved/rejected/cancelled/executed).
+     *     @type string $confidence Optional minimum confidence value (0..1) as string/float.
+     * }
+     *
+     * @return array<int,object> List of decision records.
      */
-    public function create(array $decision, array $ctx): int {
+    public static function filter(array $args): array {
         global $wpdb;
+        $table = $wpdb->prefix . 'seojusai_decisions';
+        $where  = [];
+        $params = [];
 
-        $post_id = (int) ($ctx['post_id'] ?? 0);
-        $source = sanitize_key((string)($ctx['source'] ?? 'unknown'));
-        $context_type = sanitize_key((string)($ctx['context_type'] ?? 'page'));
-        if ($context_type === '') $context_type = 'page';
-
-        $risk = sanitize_key((string)($decision['risk_level'] ?? ($decision['risk'] ?? 'unknown')));
-        $confidence = (float)($decision['confidence'] ?? 0.0);
-        if ($confidence < 0) $confidence = 0;
-        if ($confidence > 1) $confidence = 1;
-
-        $explain_id = sanitize_text_field((string)($decision['explain_id'] ?? ($decision['explainId'] ?? '')));
-        $actions = $decision['actions'] ?? null;
-
-        $hash = (string)($decision['decision_hash'] ?? ($decision['hash'] ?? ''));
-        if ($hash === '') {
-            $hash = hash('sha256', wp_json_encode($decision));
+        // Filter by post ID if provided
+        if (!empty($args['post_id'])) {
+            $where[] = 'post_id = %d';
+            $params[] = (int) $args['post_id'];
         }
-        $hash = substr(preg_replace('/[^a-f0-9]/', '', strtolower($hash)) ?: '', 0, 64);
 
-        $data = [
-            'created_at' => time(),
-            'source' => substr($source, 0, 32),
-            'context_type' => substr($context_type, 0, 16),
-            'post_id' => $post_id,
-            'explain_id' => substr($explain_id, 0, 64),
-            'risk_level' => substr($risk, 0, 16),
-            'confidence' => round($confidence, 2),
-            'decision_hash' => $hash,
-            'actions_json' => is_array($actions) ? wp_json_encode($actions, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : null,
-            'meta' => isset($ctx['meta']) ? wp_json_encode($ctx['meta'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : null,
-        ];
+        // Filter by status if provided
+        if (!empty($args['status'])) {
+            $where[] = 'status = %s';
+            $params[] = (string) $args['status'];
+        }
 
-        $wpdb->insert($this->table(), $data);
-        return (int)$wpdb->insert_id;
-    }
+        // Filter by minimum confidence threshold if provided and numeric
+        if ($args['confidence'] !== '' && is_numeric($args['confidence'])) {
+            $where[] = 'confidence >= %f';
+            $params[] = (float) $args['confidence'];
+        }
 
-    /** @return array<int,array<string,mixed>> */
-    public function list_recent(int $days = 30, int $limit = 50): array {
-        global $wpdb;
-        $days = max(1, min(365, $days));
-        $limit = max(1, min(200, $limit));
-        $since = time() - ($days * DAY_IN_SECONDS);
+        $sql = "SELECT * FROM {$table}";
+        if ($where) {
+            $sql .= ' WHERE ' . implode(' AND ', $where);
+        }
+        $sql .= ' ORDER BY id DESC LIMIT 100';
 
-        $sql = $wpdb->prepare(
-            "SELECT * FROM {$this->table()} WHERE created_at >= %d ORDER BY created_at DESC LIMIT %d",
-            $since, $limit
-        );
-        $rows = $wpdb->get_results($sql, ARRAY_A);
+        // Prepare query with parameters if any
+        $prepared = $params ? $wpdb->prepare($sql, ...$params) : $sql;
+        $rows = $wpdb->get_results($prepared);
         return is_array($rows) ? $rows : [];
     }
 }
