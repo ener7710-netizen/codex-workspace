@@ -1,54 +1,47 @@
 <?php
 declare(strict_types=1);
 
-namespace SEOJusAI\Rest\Controllers;
+namespace SEOJusAI\Safety;
 
-use WP_REST_Request;
-use WP_REST_Response;
-use SEOJusAI\Input\Input;
-use SEOJusAI\Rest\RestKernel;
-use SEOJusAI\Rest\AbstractRestController;
-use SEOJusAI\Rest\Contracts\RestControllerInterface;
 use SEOJusAI\Capabilities\CapabilityGuard;
 use SEOJusAI\Capabilities\CapabilityMap;
-use SEOJusAI\Safety\SafeMode;
 
 defined('ABSPATH') || exit;
 
-final class SafeModeController extends AbstractRestController implements RestControllerInterface {
+final class SafeModeController {
 
-    public function register_routes(): void {
-        register_rest_route('seojusai/v1', '/safe-mode', [
-            'methods'             => 'GET',
-            'permission_callback' => [ RestKernel::class, 'can_manage' ],
-            'callback'            => [ $this, 'status' ],
-        ]);
+	public const ACTION_TOGGLE = 'seojusai_toggle_safe_mode';
 
-        register_rest_route('seojusai/v1', '/safe-mode', [
-            'methods'             => 'POST',
-            'permission_callback' => [ RestKernel::class, 'can_manage' ],
-            'callback'            => [ $this, 'toggle' ],
-        ]);
-    }
+	public function register(): void {
+		add_action('admin_post_' . self::ACTION_TOGGLE, [$this, 'handle_toggle']);
+	}
 
-    public function status(WP_REST_Request $request): WP_REST_Response {
-        return $this->ok([
-            'enabled' => SafeMode::is_enabled(),
-        ]);
-    }
+	public function handle_toggle(): void {
+		if (!is_admin()) {
+			wp_die(esc_html__('Недоступно.', 'seojusai'), 403);
+		}
 
-    public function toggle(WP_REST_Request $request): WP_REST_Response {
-        if (!CapabilityGuard::can(CapabilityMap::MANAGE_SETTINGS)) {
-            return new WP_REST_Response(['ok' => false, 'error' => 'Forbidden'], 403);
-        }
+		if (!CapabilityGuard::can(CapabilityMap::MANAGE_SETTINGS)) {
+			wp_die(esc_html__('Недостатньо прав.', 'seojusai'), 403);
+		}
 
-        $enabled = (bool) $request->get_param('enabled');
-        if ($enabled) {
-            SafeMode::enable();
-        } else {
-            SafeMode::disable();
-        }
+		check_admin_referer(self::ACTION_TOGGLE);
 
-        return $this->ok(['enabled' => SafeMode::is_enabled()]);
-    }
+		$enable = isset($_POST['enable']) ? (bool) (int) wp_unslash($_POST['enable']) : false;
+		$reason = isset($_POST['reason']) ? sanitize_text_field((string) wp_unslash($_POST['reason'])) : 'manual';
+
+		if ($enable) {
+			SafeMode::activate($reason !== '' ? $reason : 'manual');
+		} else {
+			SafeMode::deactivate();
+		}
+
+		$redirect = wp_get_referer();
+		if (!is_string($redirect) || $redirect === '') {
+			$redirect = admin_url('admin.php?page=seojusai-governance');
+		}
+
+		wp_safe_redirect($redirect);
+		exit;
+	}
 }
