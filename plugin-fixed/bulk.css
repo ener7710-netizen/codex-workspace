@@ -1,0 +1,5 @@
+.seojusai-bulk .card { max-width: 980px; }
+.seojusai-bulk-jobs table { width: 100%; border-collapse: collapse; }
+.seojusai-bulk-jobs th, .seojusai-bulk-jobs td { padding: 8px 10px; border-bottom: 1px solid #e5e5e5; text-align: left; }
+.seojusai-bulk-jobs .status { font-weight: 600; }
+.seojusai-bulk-jobs .muted { color: #666; }

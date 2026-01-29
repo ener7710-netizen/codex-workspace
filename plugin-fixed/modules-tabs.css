@@ -1,0 +1,4 @@
+
+.seojusai-tabs{display:flex;gap:8px;margin-bottom:16px}
+.seojusai-tabs button{padding:8px 12px;border-radius:6px;border:1px solid #ddd;background:#f7f7f7}
+.seojusai-tabs button.active{background:#1fb36b;color:#fff;border-color:#1fb36b}

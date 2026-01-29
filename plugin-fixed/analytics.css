@@ -1,0 +1,17 @@
+/* Analytics UI (clean-room) - migrated appearance from JusAI Analytics UI Pro */
+
+.jusai-tabs{margin:15px 0 25px}
+.jusai-kpis{display:flex;gap:16px;margin-bottom:20px}
+.jusai-kpi{background:#fff;border:1px solid #e5e7eb;padding:18px;flex:1;position:relative}
+.jusai-kpi:after{content:'';position:absolute;left:0;top:0;height:4px;width:100%;background:#4f46e5}
+.kpi-title{font-size:12px;color:#6b7280;text-transform:uppercase}
+.kpi-num{font-size:30px;margin-top:8px}
+.jusai-card{background:#fff;border:1px solid #e5e7eb;margin-bottom:20px}
+.jusai-card-header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #eef0f2}
+.jusai-card h3{margin:0;font-size:14px}
+.jusai-chart{height:220px;background:linear-gradient(180deg,#eef2ff,#ffffff);border-top:1px solid #eef0f2}
+.jusai-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.jusai-donut{height:220px;background:radial-gradient(circle at center,#fff 40%,#e5e7eb 41%);display:flex;align-items:center;justify-content:center;font-size:32px;color:#111}
+.jusai-empty{text-align:center;padding:60px 20px}
+table.widefat th{font-weight:600}
+

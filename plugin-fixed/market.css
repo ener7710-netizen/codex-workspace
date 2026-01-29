@@ -1,0 +1,4 @@
+.seojusai-market .card { max-width: 1200px; }
+.seojusai-market code { font-size: 12px; }
+.seojusai-market textarea { width: 100%; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+.seojusai-market .description { color: #646970; }

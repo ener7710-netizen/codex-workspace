@@ -1,0 +1,89 @@
+
+/* Загальні стилі адмін-сторінок SEOJusAI */
+.seojusai-wrap .seojusai-page-header{margin:8px 0 16px}
+.seojusai-wrap .seojusai-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;margin-top:16px}
+.seojusai-wrap .seojusai-card{background:#fff;border:1px solid #dcdcde;border-radius:12px;padding:16px}
+.seojusai-wrap .seojusai-card h2{margin-top:0}
+.seojusai-wrap .seojusai-muted{color:#646970}
+.seojusai-wrap .seojusai-empty{padding:12px;border:1px dashed #c3c4c7;border-radius:10px;background:#f6f7f7}
+.seojusai-wrap .seojusai-list{margin:0;padding-left:18px}
+.seojusai-wrap .seojusai-list li{margin:6px 0}
+
+
+/* Admin pages helpers */
+.seojusai-admin .seojusai-muted { color:#6b7280; }
+.seojusai-grid { display:flex; gap:16px; flex-wrap:wrap; }
+.seojusai-field { margin: 12px 0; }
+.seojusai-field label { display:block; font-weight:600; margin-bottom:6px; }
+.seojusai-actions { display:flex; gap:10px; align-items:center; margin-top:12px; }
+.seojusai-spinner { width:18px; height:18px; border-radius:50%; border:2px solid rgba(0,0,0,.15); border-top-color: rgba(0,0,0,.6); display:none; animation: seojusaiSpin 800ms linear infinite; }
+@keyframes seojusaiSpin { to { transform: rotate(360deg); } }
+.seojusai-notice { margin-top:12px; padding:10px 12px; border-radius:8px; border:1px solid rgba(0,0,0,.08); background:#fff; }
+.seojusai-notice--success { border-color: rgba(34,197,94,.35); background: rgba(34,197,94,.08); }
+.seojusai-notice--error { border-color: rgba(239,68,68,.35); background: rgba(239,68,68,.08); }
+.seojusai-pre { max-height: 320px; overflow:auto; background:#0b1220; color:#e5e7eb; padding:12px; border-radius:10px; }
+.seojusai-issues { margin:10px 0 0; padding-left:18px; }
+.seojusai-issue { margin:6px 0; }
+.seojusai-issue--critical { font-weight:600; }
+
+/* =========================================================
+ * Analytics (Rank Math-like SPA)
+ * =======================================================*/
+.seojusai-analytics-root { margin-top: 8px; }
+.seojusai-analytics-header { display:flex; justify-content:space-between; align-items:flex-end; gap: 12px; flex-wrap: wrap; margin: 12px 0 6px; }
+.seojusai-analytics-title { margin: 0; font-size: 20px; font-weight: 600; }
+.seojusai-analytics-subtitle { margin: 4px 0 0; color:#6b7280; font-size: 12px; }
+.seojusai-analytics-controls { display:flex; gap: 10px; align-items:flex-end; flex-wrap:wrap; }
+.seojusai-analytics-inline { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.seojusai-analytics-tabs { display:flex; gap: 8px; flex-wrap:wrap; margin: 10px 0 14px; border-bottom: 1px solid #dcdcde; padding-bottom: 10px; }
+.seojusai-analytics-tab { padding: 8px 10px; border:1px solid #dcdcde; border-radius: 8px; background:#fff; cursor:pointer; font-weight: 600; font-size: 12px; }
+.seojusai-analytics-tab.is-active { background: #2271b1; border-color: #2271b1; color:#fff; }
+.seojusai-analytics-body { margin-top: 6px; }
+
+.seojusai-analytics-kpi-grid { display:grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+@media(max-width: 1280px){ .seojusai-analytics-kpi-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
+.seojusai-analytics-kpi { background:#fff; border:1px solid #dcdcde; border-radius: 12px; padding: 12px; }
+.seojusai-analytics-kpi__label { font-size: 12px; color:#6b7280; }
+.seojusai-analytics-kpi__value { font-size: 20px; font-weight:700; margin-top: 6px; }
+.seojusai-analytics-kpi__sub { font-size: 12px; color:#6b7280; margin-top: 4px; }
+
+.seojusai-analytics-panel { background:#fff; border:1px solid #dcdcde; border-radius: 12px; padding: 12px; margin-top: 12px; }
+.seojusai-analytics-panel__header { display:flex; justify-content:space-between; align-items:center; gap: 10px; flex-wrap:wrap; margin-bottom: 10px; }
+.seojusai-analytics-panel__title { margin: 0; font-size: 14px; font-weight: 700; }
+.seojusai-analytics-panel__hint { font-size: 12px; color:#6b7280; }
+
+.seojusai-analytics-chart { height: 140px; background: linear-gradient(180deg, rgba(34,113,177,.06), rgba(34,113,177,0)); border:1px solid rgba(34,113,177,.15); border-radius: 12px; padding: 8px; }
+.seojusai-analytics-chart svg { width: 100%; height: 100%; display:block; }
+
+.seojusai-analytics-section-title { margin: 14px 0 8px; font-size: 14px; font-weight: 700; }
+
+.seojusai-analytics-toolbar { display:flex; justify-content:space-between; align-items:flex-end; gap: 10px; flex-wrap:wrap; margin-bottom: 8px; }
+.seojusai-analytics-toolbar__left { display:flex; gap: 10px; align-items:flex-end; flex-wrap:wrap; }
+.seojusai-analytics-toolbar__hint { font-size: 12px; color:#6b7280; }
+
+.seojusai-analytics-table { width: 100%; border-collapse: collapse; }
+.seojusai-analytics-table th { position: sticky; top: 0; background:#fff; z-index: 2; }
+.seojusai-analytics-th.is-sortable { cursor: pointer; user-select: none; }
+.seojusai-analytics-th__label { display:flex; align-items:center; gap: 6px; }
+.seojusai-analytics-sort { font-size: 11px; opacity: .6; }
+.seojusai-analytics-tr.is-clickable { cursor:pointer; }
+.seojusai-analytics-table-foot { margin-top: 8px; font-size: 12px; color:#6b7280; }
+
+.seojusai-analytics-modal__row { margin: 8px 0; }
+.seojusai-analytics-modal__label { font-size: 12px; color:#6b7280; }
+.seojusai-analytics-modal__value { font-size: 14px; font-weight: 600; margin-top: 2px; }
+
+/* SERP competitor overlay (Keywords tab) */
+.seojusai-analytics-serp { margin-top: 16px; padding: 14px; background:#fff; border:1px solid #dcdcde; border-radius: 12px; }
+.seojusai-analytics-serp__head { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom: 10px; }
+.seojusai-analytics-serp__title { font-size: 13px; font-weight: 700; }
+.seojusai-analytics-serp__error { color:#b91c1c; font-size: 12px; margin: 6px 0; }
+.seojusai-analytics-serp__grid { display:grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width: 1100px){ .seojusai-analytics-serp__grid{ grid-template-columns: 1fr; } }
+.seojusai-analytics-serp__subtitle { margin: 0 0 8px; font-size: 12px; font-weight: 700; }
+.seojusai-analytics-serp__list { margin: 0; padding-left: 18px; }
+.seojusai-analytics-serp__row { margin: 6px 0; }
+.seojusai-analytics-serp__pos { display:inline-block; min-width: 44px; font-weight: 700; }
+.seojusai-analytics-serp__snippet { font-size: 12px; color:#6b7280; margin-top: 2px; }
+.seojusai-analytics-serp__summary { font-size: 12px; color:#111827; margin-bottom: 8px; }
+.seojusai-analytics-serp__opps { margin: 0; padding-left: 18px; }

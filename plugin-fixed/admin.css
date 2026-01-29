@@ -1,0 +1,269 @@
+/* === SEOJusAI Admin Base Styles === */
+
+/* ===============================
+ * SEOJusAI list-table badge (Rank Math-like)
+ * =============================== */
+.column-seojusai { width: 90px; }
+.seojusai-badge {
+  display: inline-block;
+  min-width: 26px;
+  text-align: center;
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-weight: 600;
+  line-height: 1.6;
+  border: 1px solid #c3c4c7;
+  background: #f6f7f7;
+}
+.seojusai-badge.is-ok { background: #edfaef; border-color: #00a32a; }
+.seojusai-badge.is-warning { background: #fff8e5; border-color: #dba617; }
+.seojusai-badge.is-critical { background: #fbeaea; border-color: #d63638; }
+
+.seojusai-wrap {
+    max-width: 1200px;
+    margin: 20px 20px 0 0;
+}
+
+/* Card System */
+.seojusai-card {
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.seojusai-card h2, .seojusai-card h3 {
+    margin: 0 0 16px 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+/* === СУЧАСНІ ПЕРЕМИКАЧІ (iOS Style) === */
+.seojusai-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.seojusai-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.seojusai-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.seojusai-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+input:checked + .seojusai-slider {
+    background-color: #2271b1;
+}
+
+input:focus + .seojusai-slider {
+    box-shadow: 0 0 1px #2271b1;
+}
+
+input:checked + .seojusai-slider:before {
+    transform: translateX(20px);
+}
+
+/* Блокування системних модулів */
+input:disabled + .seojusai-slider {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* === СІТКА МОДУЛІВ === */
+.seojusai-module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.seojusai-module-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    border: 1px solid #dcdcde;
+    border-radius: 10px;
+    transition: border-color 0.3s ease;
+}
+
+.seojusai-module-item:hover {
+    border-color: #2271b1;
+}
+
+.seojusai-module-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 16px;
+}
+
+.seojusai-module-info p {
+    margin: 0;
+    font-size: 13px;
+    color: #646970;
+}
+
+/* === TOAST NOTIFICATIONS === */
+.seojusai-toast-container {
+    position: fixed;
+    top: 40px;
+    right: 20px;
+    z-index: 10000;
+    width: 300px;
+}
+
+.seojusai-toast {
+    animation: slideIn 0.3s ease-out;
+    border-left-width: 4px !important;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    margin-bottom: 10px !important;
+    position: relative;
+}
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Status Badges */
+.seojusai-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.seojusai-status.ok { background: #e7f7ed; color: #1e8e3e; }
+.seojusai-status.error { background: #fde8e8; color: #b32d2e; }
+
+/* Grid Layout for Dashboard */
+.seojusai-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+/* Button override */
+.button.seojusai-btn-primary {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff !important;
+    border-radius: 6px;
+    padding: 0 20px;
+    font-weight: 500;
+    height: 32px;
+    line-height: 30px;
+}
+
+/* === Елементи Dashboard === */
+
+.seojusai-score-ring {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 auto 15px;
+    border: 6px solid #f0f0f1;
+}
+
+.score-high { border-color: #1e8e3e; color: #1e8e3e; background: #e7f7ed; }
+.score-mid { border-color: #f1c40f; color: #9a7d0a; background: #fff9e6; }
+.score-low { border-color: #b32d2e; color: #b32d2e; background: #fde8e8; }
+
+.seojusai-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.seojusai-table th {
+    text-align: left;
+    padding: 12px;
+    background: #f8f9fa;
+    border-bottom: 2px solid #f0f0f1;
+    color: #50575e;
+    font-weight: 600;
+}
+
+.seojusai-table td {
+    padding: 14px 12px;
+    border-bottom: 1px solid #f0f0f1;
+    vertical-align: middle;
+}
+
+/* Теги типів подій */
+.type-tag {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.tag-internal_link { background: #e0f2fe; color: #0369a1; }
+.tag-schema_update { background: #f3e8ff; color: #6b21a8; }
+.tag-learning { background: #fef3c7; color: #92400e; }
+.tag-audit { background: #f0f0f1; color: #3c434a; }
+
+/* Анімація для кнопок */
+.seojusai-btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* Стан порожнього журналу */
+.seojusai-empty-state {
+    padding: 40px;
+    text-align: center;
+    color: #a7aaad;
+}
+
+.seojusai-empty-state .dashicons {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 10px;
+    color: #dcdcde;
+}
+.seojusai-btn-create-page .spinner {
+    visibility: visible;
+    float: none;
+    margin: -2px 5px 0 0;
+}
